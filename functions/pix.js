@@ -96,6 +96,7 @@ exports.handler = async (event) => {
     amount:      amountReais,
     external_id: externalId,
     expires_in:  3600,
+    product_id:  "342HSYKW",
     customer: {
       name:     customerName,
       email:    customerEmail,
