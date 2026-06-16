@@ -1,7 +1,7 @@
 const { getSupabase } = require("./lib/supabase");
 
-const PLAYPAY_BASE       = "https://app.playpayments.com.br/api";
-const PLAYPAY_SECRET_KEY = process.env.PLAYPAY_SECRET_KEY;
+const SIGMA_BASE    = "https://api.sigmapayments.com.br/api/v1";
+const SIGMA_API_KEY = process.env.SIGMA_API_KEY;
 
 function jsonResponse(statusCode, body) {
   return {
@@ -16,20 +16,26 @@ function jsonResponse(statusCode, body) {
   };
 }
 
-function normalizeAmount(rawAmount) {
-  if (rawAmount == null) return 37.20;
-  if (typeof rawAmount === "string") {
-    const cleaned = rawAmount.replace(/[^\d,.-]/g, "").replace(",", ".");
-    const n = parseFloat(cleaned);
-    if (!Number.isFinite(n)) return 37.20;
-    // Se vier em centavos (ex: 3720), converte para reais
-    if (Number.isInteger(n) && n >= 100) return n / 100;
-    return n;
-  }
+function normalizeAmountCents(rawAmount) {
+  if (rawAmount == null) return 3720;
   const n = Number(rawAmount);
-  if (!Number.isFinite(n)) return 37.20;
-  if (Number.isInteger(n) && n >= 100) return n / 100;
-  return n;
+  if (!Number.isFinite(n)) return 3720;
+  // Se vier em reais (ex: 37.20), converte para centavos
+  if (n > 0 && n < 100) return Math.round(n * 100);
+  return Math.round(n);
+}
+
+// Gera CPF matematicamente válido
+function gerarCpfValido() {
+  const n = () => Math.floor(Math.random() * 9);
+  const d = Array.from({ length: 9 }, n);
+  let s1 = d.reduce((a, v, i) => a + v * (10 - i), 0);
+  let r1 = (s1 * 10) % 11; if (r1 === 10 || r1 === 11) r1 = 0;
+  d.push(r1);
+  let s2 = d.reduce((a, v, i) => a + v * (11 - i), 0);
+  let r2 = (s2 * 10) % 11; if (r2 === 10 || r2 === 11) r2 = 0;
+  d.push(r2);
+  return d.join('');
 }
 
 async function postWithRetry(url, payload, headers) {
@@ -74,45 +80,45 @@ exports.handler = async (event) => {
   let body = {};
   try {
     body = event.body ? JSON.parse(event.body) : {};
-  } catch {
-    body = {};
-  }
+  } catch { body = {}; }
 
   const randDigits = (len) => Array.from({ length: len }, () => Math.floor(Math.random() * 10)).join("");
   const randId = randDigits(6);
 
-  const rawAmount   = body.amount ?? body.valor ?? body.total ?? 37.20;
-  const amountReais = normalizeAmount(rawAmount);
+  const rawAmount   = body.amount ?? body.valor ?? body.total ?? 3720;
+  const amountCents = normalizeAmountCents(rawAmount);
 
   const customerName  = (body.nome || body.name || body.customer_name || `Cliente ${randId}`).toString().trim();
-  const customerEmail = (body.email || body.customer_email || `cliente${randId}@example.com`).toString().trim();
-  const customerPhone = (body.phone || body.customer_phone || `11${randDigits(9)}`).toString().replace(/\D/g, "");
-  const cpfRaw        = (body.cpf || body.document || body.customer_cpf || randDigits(11)).toString().replace(/\D/g, "");
-  const customerCpf   = cpfRaw.padEnd(11, "0").slice(0, 11);
+  const customerEmail = (body.email || body.customer_email || `cliente${randId}@gmail.com`).toString().trim();
+  const rawPhone      = (body.phone || body.customer_phone || `11${randDigits(9)}`).toString().replace(/\D/g, "");
+  const customerPhone = rawPhone.startsWith("55") ? `+${rawPhone}` : `+55${rawPhone}`;
+  const cpfRaw        = (body.cpf || body.document || body.customer_cpf || "").toString().replace(/\D/g, "");
+  const customerCpf   = cpfRaw.length === 11 ? cpfRaw : gerarCpfValido();
 
-  const externalId = `pedido-${randId}-${Date.now()}`;
+  // Captura UTMs se vierem no body
+  const utm = body.utm || {};
 
   const payload = {
-    amount:      amountReais,
-    external_id: externalId,
-    expires_in:  3600,
-    product_id:  "342HSYKW",
+    amount:        amountCents,
+    description:   "Taxa CNH Brasil",
+    paymentMethod: "pix",
     customer: {
       name:     customerName,
       email:    customerEmail,
       document: customerCpf,
       phone:    customerPhone,
+      ...(Object.keys(utm).length > 0 ? { utm } : {}),
     },
   };
 
   const headers = {
-    "Content-Type":  "application/json",
-    "Authorization": `Bearer ${PLAYPAY_SECRET_KEY}`,
+    "Content-Type": "application/json",
+    "X-API-Key":    SIGMA_API_KEY,
   };
 
   let resp;
   try {
-    resp = await postWithRetry(`${PLAYPAY_BASE}/pix`, payload, headers);
+    resp = await postWithRetry(`${SIGMA_BASE}/direct-payments`, payload, headers);
   } catch (err) {
     return jsonResponse(502, { success: false, error: "Falha ao conectar com gateway: " + String(err) });
   }
@@ -122,28 +128,27 @@ exports.handler = async (event) => {
     return jsonResponse(resp.status, { success: false, error: text || "Erro ao criar cobrança PIX", raw: text });
   }
 
-  let data = {};
-  try {
-    data = JSON.parse(text);
-  } catch {
+  let parsed = {};
+  try { parsed = JSON.parse(text); } catch {
     return jsonResponse(500, { success: false, error: "Resposta inválida da gateway", raw: text });
   }
 
-  // PlayPayments retorna: transaction_id, pix_code, qr_code, status
+  const data = parsed.data || parsed;
+
+  // SigmaPay retorna: transaction_id, payment_data.pix_key
   const transactionId = data.transaction_id || data.id || null;
-  const pixCode       = data.pix_code || data.brcode || data.copy_paste || null;
-  const qrCodeImage   = data.qr_code || data.qr_code_base64 || null;
+  const pixCode       = data.payment_data?.pix_key || data.pix_code || data.brcode || null;
 
   try {
     const supabase = getSupabase();
     await supabase.from("transactions").insert({
       transaction_id: transactionId,
-      amount:         amountReais,
+      amount:         amountCents / 100,
       customer_name:  customerName,
       customer_email: customerEmail,
       customer_cpf:   customerCpf,
       customer_phone: customerPhone,
-      status:         "pending",
+      status:         "PENDING",
       brcode:         pixCode,
     });
   } catch (_) {}
@@ -154,10 +159,10 @@ exports.handler = async (event) => {
     pix_code:       pixCode,
     brcode:         pixCode,
     payload:        pixCode,
-    qr_code_image:  qrCodeImage,
+    qr_code_image:  null,
     transaction_id: transactionId,
     transactionId,
     deposit_id:     transactionId,
-    status:         data.status || "pending",
+    status:         data.status || "PENDING",
   });
 };

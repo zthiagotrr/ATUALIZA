@@ -1,19 +1,19 @@
 const { getSupabase } = require("./lib/supabase");
 
-const PLAYPAY_BASE       = "https://app.playpayments.com.br/api";
-const PLAYPAY_SECRET_KEY = process.env.PLAYPAY_SECRET_KEY;
+const SIGMA_BASE    = "https://api.sigmapayments.com.br/api/v1";
+const SIGMA_API_KEY = process.env.SIGMA_API_KEY;
 
 const UTMIFY_TOKEN = "EAAakRBooZBQABRp8xaEz9T5H3YBvyq1JumM6Ie1LgCUQHERsBOBuo4ZA7WiVfnQ1hdmmpnM14JnsZC7tuAyHxCcEjwKnuGGiOlpL5PtZAovEWD72zPEtFhP49wewKXuhoXeQx5RKczdHZAyKr8Va7jrpk3MNMgT9XDT3hGv5KlnYq3ML2I57tyMrbOvtWugZDZD";
 
 async function sendUtmifyOrder(txData, transactionId, paidAt) {
   try {
     const amountCents     = Math.round((txData.amount || 37.20) * 100);
-    const gatewayFeeCents = Math.round(amountCents * 0.015); // ~1.5% estimado
+    const gatewayFeeCents = Math.round(amountCents * 0.015);
     const netCents        = amountCents - gatewayFeeCents;
 
     const payload = {
       orderId:       transactionId,
-      platform:      "PlayPayments",
+      platform:      "SigmaPay",
       paymentMethod: "pix",
       status:        "paid",
       createdAt:     txData.created_at || new Date().toISOString().replace("T", " ").slice(0, 19),
@@ -28,11 +28,11 @@ async function sendUtmifyOrder(txData, transactionId, paidAt) {
         ip:       null,
       },
       products: [{
-        id:        "cnh-brasil-001",
-        name:      "Taxa CNH Brasil",
-        planId:    null,
-        planName:  null,
-        quantity:  1,
+        id:           "cnh-brasil-001",
+        name:         "Taxa CNH Brasil",
+        planId:       null,
+        planName:     null,
+        quantity:     1,
         priceInCents: amountCents,
       }],
       trackingParameters: {
@@ -45,26 +45,22 @@ async function sendUtmifyOrder(txData, transactionId, paidAt) {
         utm_term:     txData.utm_term     || null,
       },
       commission: {
-        totalPriceInCents:    amountCents,
-        gatewayFeeInCents:    gatewayFeeCents,
+        totalPriceInCents:     amountCents,
+        gatewayFeeInCents:     gatewayFeeCents,
         userCommissionInCents: netCents,
-        currency:             "BRL",
+        currency:              "BRL",
       },
       isTest: false,
     };
 
     const resp = await fetch("https://api.utmify.com.br/api-credentials/orders", {
       method:  "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-token":  UTMIFY_TOKEN,
-      },
-      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json", "x-api-token": UTMIFY_TOKEN },
+      body:    JSON.stringify(payload),
     });
-    const text = await resp.text();
-    console.log(`[UTMify] Order enviado - status ${resp.status}: ${text}`);
+    console.log(`[UTMify] status ${resp.status}: ${await resp.text()}`);
   } catch (err) {
-    console.error("[UTMify] Erro ao enviar order:", err);
+    console.error("[UTMify] Erro:", err);
   }
 }
 
@@ -112,12 +108,11 @@ exports.handler = async (event) => {
   let statusResp;
   let text = "";
   try {
-    statusResp = await fetch(`${PLAYPAY_BASE}/pix/${encodeURIComponent(transactionId)}`, {
+    // SigmaPay: GET /api/v1/payments/:id/status (rota pública)
+    statusResp = await fetch(`${SIGMA_BASE}/payments/${encodeURIComponent(transactionId)}/status`, {
       method:  "GET",
-      headers: {
-        "Authorization": `Bearer ${PLAYPAY_SECRET_KEY}`,
-      },
-      signal: controller.signal,
+      headers: { "X-API-Key": SIGMA_API_KEY },
+      signal:  controller.signal,
     });
     text = await statusResp.text();
   } catch (err) {
@@ -127,21 +122,19 @@ exports.handler = async (event) => {
     clearTimeout(timeout);
   }
 
-  let data = {};
-  try {
-    data = JSON.parse(text);
-  } catch {
-    data = {};
-  }
+  let parsed = {};
+  try { parsed = JSON.parse(text); } catch { parsed = {}; }
 
   if (!statusResp.ok) {
     return jsonResponse(statusResp.status, { success: false, error: text || "Erro ao consultar pagamento" });
   }
 
-  // PlayPayments status: pending | paid | cancelled | expired
-  const rawStatus = (data.status || "pending").toLowerCase();
-  const paid      = rawStatus === "paid";
-  const status    = paid ? "paid" : rawStatus;
+  const data = parsed.data || parsed;
+
+  // SigmaPay status: PENDING | AUTHORIZED | REJECTED | FAILED
+  const rawStatus = (data.status || "PENDING").toUpperCase();
+  const paid      = rawStatus === "AUTHORIZED";
+  const status    = paid ? "paid" : rawStatus.toLowerCase();
   const paidAt    = data.paid_at || null;
 
   try {
