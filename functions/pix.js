@@ -20,8 +20,11 @@ function normalizeAmountCents(rawAmount) {
   if (rawAmount == null) return 3720;
   const n = Number(rawAmount);
   if (!Number.isFinite(n)) return 3720;
-  // Se vier em reais (ex: 37.20), converte para centavos
-  if (n > 0 && n < 100) return Math.round(n * 100);
+  // Se for número com casas decimais (ex: 37.20, 74.9) = reais → centavos
+  if (!Number.isInteger(n)) return Math.round(n * 100);
+  // Se for inteiro pequeno (< 100) = reais → centavos
+  if (n < 100) return Math.round(n * 100);
+  // Se for inteiro grande (>= 100) = já em centavos
   return Math.round(n);
 }
 
@@ -100,7 +103,7 @@ exports.handler = async (event) => {
 
   const payload = {
     amount:        amountCents,
-    description:   "Taxa CNH Brasil",
+    description:   "Livro Falante",
     paymentMethod: "pix",
     customer: {
       name:     customerName,

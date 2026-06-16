@@ -29,7 +29,7 @@ async function sendUtmifyOrder(txData, transactionId, paidAt) {
       },
       products: [{
         id:           "cnh-brasil-001",
-        name:         "Taxa CNH Brasil",
+        name:         "Livro Falante",
         planId:       null,
         planName:     null,
         quantity:     1,
