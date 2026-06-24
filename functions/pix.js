@@ -17,9 +17,9 @@ function jsonResponse(statusCode, body) {
 }
 
 function normalizeAmountCents(rawAmount) {
-  if (rawAmount == null) return 5477;
+  if (rawAmount == null) return 4572;
   const n = Number(rawAmount);
-  if (!Number.isFinite(n)) return 5477;
+  if (!Number.isFinite(n)) return 4572;
   if (!Number.isInteger(n)) return Math.round(n * 100);
   if (n < 100) return Math.round(n * 100);
   return Math.round(n);
@@ -96,7 +96,7 @@ exports.handler = async (event) => {
 
   const payload = {
     amount:        amountCents,
-    description:   "Livro Falante",
+    description:   "Caderno Infantil PDF",
     paymentMethod: "pix",
     customer: {
       name:     customerName,

