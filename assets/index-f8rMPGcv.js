@@ -13030,7 +13030,7 @@ function f3() {
   return l.jsxs(l.Fragment, {
     children: [l.jsx("header", {
       children: l.jsx("img", {
-        src: "https://i.imgur.com/8TPLaSx.png",
+        src: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80",
         alt: "Imagem de cabeçalho com design moderno e cores vibrantes",
         style: {
           width: "100%"
@@ -24562,7 +24562,7 @@ function uT() {
           id: "como-se-inscrever",
           className: "mb-6",
           children: l.jsx("img", {
-            src: "https://i.imgur.com/8TPLaSx.png",
+            src: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80",
             alt: "CNH do Brasil - Como se inscrever",
             className: "w-full rounded-lg shadow-md"
           })
