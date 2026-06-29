@@ -1,3 +1,4 @@
+# deploy: sem cloaker
 [build]
   publish = "."
   functions = "functions"
