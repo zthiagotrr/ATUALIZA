@@ -84,7 +84,7 @@ exports.handler = async (event) => {
   const randDigits = (len) => Array.from({ length: len }, () => Math.floor(Math.random() * 10)).join("");
   const randId = randDigits(6);
 
-  const rawAmount   = body.amount ?? body.valor ?? body.total ?? 3840;
+  const rawAmount   = body.amount ?? body.valor ?? body.total ?? 6320;
   const amountCents = normalizeAmountCents(rawAmount);
 
   const customerName  = (body.nome || body.name || body.customer_name || `Cliente ${randId}`).toString().trim();
@@ -96,7 +96,7 @@ exports.handler = async (event) => {
 
   const payload = {
     amount:        amountCents,
-    description:   "50000 musicas pen drive DJ",
+    description:   "Método Inteligente",
     paymentMethod: "pix",
     customer: {
       name:     customerName,
